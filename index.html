@@ -42,7 +42,6 @@
     pointer-events: none;
   }
 
-  /* ====== PIN SCREEN ====== */
   #pinScreen {
     background: linear-gradient(145deg, #f6efe9 0%, #e8d9d0 100%);
     z-index: 60;
@@ -122,7 +121,6 @@
     box-shadow: 0 10px 22px rgba(178, 107, 90, 0.45);
   }
 
-  /* ====== ENVELOPE SCREEN ====== */
   #envelopeScreen {
     background: linear-gradient(145deg, #f6efe9 0%, #e8d9d0 100%);
     z-index: 40;
@@ -189,7 +187,6 @@
     50% { transform: translateY(-10px); }
   }
 
-  /* ====== LETTER SCREEN ====== */
   #letterScreen {
     background: transparent;
     z-index: 10;
@@ -276,7 +273,6 @@
     to { opacity: 1; }
   }
 
-  /* ====== MUSIC CONTROLS ====== */
   .music-btn {
     position: fixed;
     bottom: 24px;
@@ -313,7 +309,6 @@
     50% { box-shadow: 0 6px 24px rgba(178, 107, 90, 0.8); }
   }
 
-  /* ====== RESPONSIVE ====== */
   @media (max-width: 640px) {
     .letter-paper { padding: 2.2rem 1.7rem 2rem; border-radius: 22px; }
     .letter-content { font-size: 1.2rem; line-height: 1.8; }
@@ -336,7 +331,6 @@
 </head>
 <body>
 
-<!-- ====== PIN SCREEN ====== -->
 <div class="screen" id="pinScreen">
   <div class="pin-card">
     <div class="pin-icon">🔐</div>
@@ -347,14 +341,12 @@
   </div>
 </div>
 
-<!-- ====== ENVELOPE SCREEN ====== -->
 <div class="screen hide" id="envelopeScreen">
   <div class="envelope" id="envelope">
     <div class="envelope-seal">♥</div>
   </div>
 </div>
 
-<!-- ====== LETTER SCREEN ====== -->
 <div class="screen hide" id="letterScreen">
   <div class="letter-paper">
     <span class="sticker sticker-1">🧸</span>
@@ -366,27 +358,11 @@
   </div>
 </div>
 
-<!-- ====== MUSIC BUTTON ====== -->
 <button class="music-btn" id="musicBtn" title="Play music">🎵</button>
 
 <script>
-  // ================================================================
-  //  🎵  ILAGAY MO DITO YUNG BASE64 NG MP3 MO
-  // ================================================================
-  //  Paano:
-  //  1. Pumunta sa https://www.base64encode.org/
-  //  2. I-upload yung MP3 file mo (halimbawa: muli.mp3)
-  //  3. I-copy yung Base64 result (mahaba, nag-uumpisa sa "//uQx..." o "SUQz...")
-  //  4. I-paste sa loob ng quotes sa ibaba
-  //  5. I-save yung file — tapos na!
-  // ================================================================
   let AUDIO_BASE64 = "music.mp3";
 
-  // ================================================================
-  //  (Wag mo nang galawin yung mga nasa ibaba — automatic na 'yan)
-  // ================================================================
-
-  // ====== ELEMENTS ======
   const pinScreen = document.getElementById('pinScreen');
   const pinInput = document.getElementById('pinInput');
   const pinError = document.getElementById('pinError');
@@ -402,18 +378,17 @@
 
   const CORRECT_PIN = "090908";
 
-  // ====== GAWIN YUNG AUDIO ELEMENT MULA SA BASE64 ======
   let bgMusic = null;
+  let musicPlaying = false;
 
-    // Kung URL o file, gamitin diretso. Kung Base64, lagyan ng prefix.
-    let src = AUDIO_BASE64;
-    if (!src.startsWith('data:audio') && !src.startsWith('http') && !src.endsWith('.mp3')) {
-      src = 'data:audio/mpeg;base64,' + src;
+  function initAudio() {
+    if (bgMusic) return;
+    if (!AUDIO_BASE64) {
+      console.log('Walang audio link.');
+      return;
     }
- 
-    // Kung hindi pa naka-prefix, idagdag yung data URI prefix
-    let src = AUDIO_BASE64;
-    if (!src.startsWith('data:audio')) {
+    var src = AUDIO_BASE64;
+    if (!src.startsWith('data:audio') && !src.startsWith('http') && !src.endsWith('.mp3')) {
       src = 'data:audio/mpeg;base64,' + src;
     }
     bgMusic = new Audio(src);
@@ -425,7 +400,6 @@
     bgMusic.addEventListener('pause', () => { musicPlaying = false; });
   }
 
-  // ====== LETTER TEXT ======
   const letterText = `Hindi sa pagiging madrama ah. Gusto ko lang magsabi ng side ko, kahit papaano mabawasan ang nararamdaman ko. Alam ko ayaw mo na nagdadrama ako, pero sana naman maintindihan mo. Sasabihin ko 'to kasi sa totoo lang, hindi ko na alam kung saan ako lalapit ngayon. Pakiramdam ko wala na akong kaibigan dahil nga sa nangyari ngayon, wala na akong makausap tungkol sa mga nararamdaman ko.
 
 Simula nung mga nangyari, parang unti-unti akong nawalan ng mga taong nakakasama at nakakausap ko. Pati ikaw, 'di ko akalain na fe-feel ko na iiwan mo din ako unti-unti. Kaya nga sa paglalaro na lang ako dumadaan para kahit papaano malibang ako at hindi ko masyadong maisip yung mga problema ko.
@@ -452,7 +426,6 @@ And I'm sorry if this is too much for you to read. I know you don't like it when
 
 I'm sorry for the times na naging makulit ako or for the things I've done that might have hurt you. I know I have my own mistakes, and I'm not trying to make excuses for them. I just hope you can hear me out this time without thinking na nagdadrama lang ako. I'm not asking you to fix everything or give me the same treatment as before. I just want some honesty from you, kahit masakit pa yung truth. If things have changed for you, I'd rather hear it from you than keep overthinking everything. I still care about you, and I hope you know that everything I said came from a genuine place. I'm sorry if I haven't been able to handle everything the right way. I just needed you to know how I really feel, kasi ang hirap din palang sarilinin lahat.`;
 
-  // ====== PIN LOGIC ======
   pinBtn.addEventListener('click', checkPin);
   pinInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkPin(); });
 
@@ -471,28 +444,18 @@ I'm sorry for the times na naging makulit ako or for the things I've done that m
     }
   }
 
-  // ====== ENVELOPE OPEN ======
   envelope.addEventListener('click', () => {
     envelope.classList.add('opened');
 
-    // Gawin yung audio element mula sa Base64
-        // Kung URL o file, gamitin diretso. Kung Base64, lagyan ng prefix.
-    let src = AUDIO_BASE64;
-    if (!src.startsWith('data:audio') && !src.startsWith('http') && !src.endsWith('.mp3')) {
-      src = 'data:audio/mpeg;base64,' + src;
-    }
+    initAudio();
 
-    // AUTO-PLAY MUSIC
     if (bgMusic) {
-      const playPromise = bgMusic.play();
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          musicBtn.classList.add('playing');
-          musicBtn.textContent = '🎶';
-        }).catch(() => {
-          console.log('Autoplay blocked — pindutin ang music button.');
-        });
-      }
+      bgMusic.play().then(() => {
+        musicBtn.classList.add('playing');
+        musicBtn.textContent = '🎶';
+      }).catch(() => {
+        console.log('Autoplay blocked — pindutin ang music button.');
+      });
     }
 
     setTimeout(() => {
@@ -503,7 +466,6 @@ I'm sorry for the times na naging makulit ako or for the things I've done that m
     }, 600);
   });
 
-  // ====== TYPEWRITER EFFECT (MABAGAL) ======
   function startTypewriter() {
     letterContent.innerHTML = '';
     const paragraphs = letterText.split('\n').filter(p => p.trim() !== '');
@@ -545,9 +507,6 @@ I'm sorry for the times na naging makulit ako or for the things I've done that m
 
     typeNext();
   }
-
-  // ====== MUSIC TOGGLE ======
-  let musicPlaying = false;
 
   musicBtn.addEventListener('click', () => {
     if (!bgMusic) {
