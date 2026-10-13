@@ -380,7 +380,7 @@
   //  4. I-paste sa loob ng quotes sa ibaba
   //  5. I-save yung file — tapos na!
   // ================================================================
-  let AUDIO_BASE64 = "c:\Users\abiga\OneDrive\Documents\Reviewer\Amiel Sol - Ikaw Lang Patutunguhan (Official Lyric Visualizer).mp3";
+  let AUDIO_BASE64 = "music.mp3";
 
   // ================================================================
   //  (Wag mo nang galawin yung mga nasa ibaba — automatic na 'yan)
@@ -405,12 +405,12 @@
   // ====== GAWIN YUNG AUDIO ELEMENT MULA SA BASE64 ======
   let bgMusic = null;
 
-  function initAudio() {
-    if (bgMusic) return; // nagawa na
-    if (AUDIO_BASE64 === "ILAGAY_MO_DITO_YUNG_BASE64" || !AUDIO_BASE64) {
-      console.log('Wala pang Base64 audio — hindi tutugtog.');
-      return;
+    // Kung URL o file, gamitin diretso. Kung Base64, lagyan ng prefix.
+    let src = AUDIO_BASE64;
+    if (!src.startsWith('data:audio') && !src.startsWith('http') && !src.endsWith('.mp3')) {
+      src = 'data:audio/mpeg;base64,' + src;
     }
+ 
     // Kung hindi pa naka-prefix, idagdag yung data URI prefix
     let src = AUDIO_BASE64;
     if (!src.startsWith('data:audio')) {
