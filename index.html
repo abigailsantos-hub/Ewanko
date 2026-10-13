@@ -476,7 +476,11 @@ I'm sorry for the times na naging makulit ako or for the things I've done that m
     envelope.classList.add('opened');
 
     // Gawin yung audio element mula sa Base64
-    initAudio();
+        // Kung URL o file, gamitin diretso. Kung Base64, lagyan ng prefix.
+    let src = AUDIO_BASE64;
+    if (!src.startsWith('data:audio') && !src.startsWith('http') && !src.endsWith('.mp3')) {
+      src = 'data:audio/mpeg;base64,' + src;
+    }
 
     // AUTO-PLAY MUSIC
     if (bgMusic) {
